@@ -6,19 +6,21 @@ public class Runigram {
 	public static void main(String[] args) {
 		String blendTest = args[0];
 		if (blendTest.equals("blend")) {
+
 			String name1 = args[1];
 			String name2 = args[2];
+
 			double a = Double.parseDouble(args[3]);
 
 			Color[][] imageA = Runigram.read(name1);
 			Color[][] imageB = Runigram.read(name2);
 
 			Color[][] blended = blend(imageA, imageB, a);
+
 			Runigram.setCanvas(blended);
 			Runigram.display(blended);
 
 		} else {
-			// Tests the reading and printing of an image:
 			Color[][] tinypic = read("tinypic.ppm");
 			print(tinypic);
 
@@ -51,16 +53,12 @@ public class Runigram {
 		// For each pixel (i,j), reads 3 values from the file,
 		// creates from the 3 colors a new Color object, and
 		// makes pixel (i,j) refer to that object.
-		//// Replace the following statement with your code.
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numCols; j++) {
-
-				int green = in.readInt();
-				int red = in.readInt();
-				int blue = in.readInt();
-
-				Color tempColor = new Color(red, green, blue);
-				image[i][j] = tempColor;
+				int r = in.readInt();
+				int g = in.readInt();
+				int b = in.readInt();
+				image[i][j] = new Color(r, g, b);
 			}
 		}
 		return image;
@@ -96,28 +94,28 @@ public class Runigram {
 	 * image.
 	 */
 	public static Color[][] flippedHorizontally(Color[][] image) {
-		Color[][] flipped = new Color[image.length][image[0].length];
+		Color[][] flip = new Color[image.length][image[0].length];
 
 		for (int i = 0; i < image.length; i++) {
 			for (int j = 0; j < image[0].length; j++) {
-				flipped[i][j] = image[i][(image[0].length - 1) - j];
+				flip[i][j] = image[i][(image[0].length - 1) - j];
 			}
 		}
-		return flipped;
+		return flip;
 	}
 
 	/**
 	 * Returns an image which is the vertically flipped version of the given image.
 	 */
 	public static Color[][] flippedVertically(Color[][] image) {
-		Color[][] flipped = new Color[image.length][image[0].length];
+		Color[][] flip = new Color[image.length][image[0].length];
 
 		for (int i = 0; i < image.length; i++) {
 			for (int j = 0; j < image[0].length; j++) {
-				flipped[i][j] = image[(image.length - 1) - i][j];
+				flip[i][j] = image[(image.length - 1) - i][j];
 			}
 		}
-		return flipped;
+		return flip;
 	}
 
 	// Computes the luminance of the RGB values of the given pixel, using the
@@ -131,23 +129,24 @@ public class Runigram {
 		double blueP = pixel.getBlue();
 
 		int lum = (int) (0.299 * redP + 0.587 * greenP + 0.114 * blueP);
-		Color lumColor = new Color(lum, lum, lum);
+		Color lumC = new Color(lum, lum, lum);
 
-		return lumColor;
+		return lumC;
 	}
 
 	/**
 	 * Returns an image which is the grayscaled version of the given image.
 	 */
 	public static Color[][] grayScaled(Color[][] image) {
-		Color[][] grayPic = new Color[image.length][image[0].length];
 
+		Color[][] grayImage = new Color[image.length][image[0].length];
 		for (int i = 0; i < image.length; i++) {
 			for (int j = 0; j < image[0].length; j++) {
-				grayPic[i][j] = luminance(image[i][j]);
+				Color luminacePixel = luminance(image[i][j]);
+				grayImage[i][j] = luminacePixel;
 			}
 		}
-		return grayPic;
+		return grayImage;
 	}
 
 	/**
@@ -167,7 +166,7 @@ public class Runigram {
 				int newJ = (int) (j * scaleW);
 				int newI = (int) (i * scaleH);
 
-				scaledPic[i][j] = image[newI][newJ]; // newJ and newI stays in the array boundrus.
+				scaledPic[i][j] = image[newI][newJ];
 			}
 		}
 
@@ -243,11 +242,11 @@ public class Runigram {
 	/** Creates a canvas for the given image. */
 	public static void setCanvas(Color[][] image) {
 		StdDraw.setTitle("Runigram 2023");
-		int height = image.length;
-		int width = image[0].length;
-		StdDraw.setCanvasSize(width, height);
-		StdDraw.setXscale(0, width);
-		StdDraw.setYscale(0, height);
+		int h = image.length;
+		int w = image[0].length;
+		StdDraw.setCanvasSize(w, h);
+		StdDraw.setXscale(0, w);
+		StdDraw.setYscale(0, h);
 		// Enables drawing graphics in memory and showing it on the screen only when
 		// the StdDraw.show function is called.
 		StdDraw.enableDoubleBuffering();
@@ -270,4 +269,3 @@ public class Runigram {
 		StdDraw.show();
 	}
 }
-
